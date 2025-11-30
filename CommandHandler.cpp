@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/29 04:38:02 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/26 13:50:55 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/30 13:18:27 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 CommandHandler::CommandHandler(Server& server) : _server(server) 
 {
 	_initializeCommands();
+	_quit = 0;
 }
 
 void	CommandHandler::_initializeCommands()
@@ -27,6 +28,7 @@ void	CommandHandler::_initializeCommands()
 	_commands["JOIN"] = &CommandHandler::_Join;
 	_commands["KICK"] = &CommandHandler::_Kick;
 	_commands["MODE"] = &CommandHandler::_Mode;
+	_commands["QUIT"] = &CommandHandler::_Quit;
 	_commands["TOPIC"] = &CommandHandler::_Topic;
 	_commands["PRIVMSG"] = &CommandHandler::_Privmsg;
 }
@@ -52,14 +54,33 @@ void	CommandHandler::handleRequest(Client *client)
 {
 	std::string	&buf = client->getBuffer();
 
-	size_t	pos;
-	while (((pos = buf.find("\r\n")) != std::string::npos) || ((pos = buf.find("\n")) != std::string::npos))
+	while (1)
 	{
-		std::string	line = buf.substr(0, pos);
-		if (pos + 1 < buf.size() && buf[pos] == '\r' && buf[pos + 1] == '\n')
-			buf.erase(0, pos + 2);
+		size_t	posCRLF = buf.find("\r\n");
+		size_t	posLF = buf.find("\n");
+
+		bool hasCRLF = posCRLF != std::string::npos;
+		bool hasLF   = posLF != std::string::npos;
+
+		if (!hasCRLF && !hasLF)
+			break;
+
+		std::string	line;
+		if (hasCRLF && (!hasLF || posCRLF < posLF))
+		{
+			line = buf.substr(0, posCRLF);
+			buf.erase(0, posCRLF + 2);
+		}
 		else
-			buf.erase(0, pos + 1);
+		{
+			line = buf.substr(0, posLF);
+			buf.erase(0, posLF + 1);
+		}
+
+		if (!line.empty() && line[line.size() - 1] == '\r')
+			line.erase(line.size() - 1);
+		if (line.empty())
+			continue;
 
 		if (line.size() > 512)
 		{
@@ -67,17 +88,20 @@ void	CommandHandler::handleRequest(Client *client)
 			_server.disconnectClient(*client);
 			return;
 		}
-	
+
 		_setCommandAndParams(line);
 		_runCommand(client);
+
+		if (_quit)
+		{
+			_quit = 0;
+			break;
+		}
 	}
 }
 
 void	CommandHandler::_setCommandAndParams(const std::string& line)
 {
-	if (line.empty())
-		return;
-	
 	_command.clear();
 	_params.clear();
 
@@ -120,8 +144,6 @@ void	CommandHandler::_runCommand(Client *client)
 		sendErrorCommand(_server, *client, "*");
 		return;
 	}
-	if (_command == "QUIT")
-		_server.setLoop();
 
 	std::map<std::string, CommandFunc>::iterator it = _commands.find(_command);
 	if (it != _commands.end())

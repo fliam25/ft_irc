@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 20:09:48 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/05 04:37:50 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 15:36:18 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,34 @@ void    sendAllRpl(Server& server, Client& client)
 	sendYourHost(server, client);
 	sendCreated(server, client);
 	sendMyInfo(server, client);
+	sendStartMotd(server, client);
+	sendMotd(server, client);
+	sendEndMotd(server, client);
+}
+
+void	sendStartMotd(Server& server, Client& client)
+{
+	std::stringstream	ss;
+	ss << ":" << SERVER_NAME << " 375 " << client.getNick() << " :- " << SERVER_NAME << " Message of the Day -\r\n";
+	server.sendToClient(client, ss.str());
+}
+
+void	sendMotd(Server& server, Client& client)
+{
+	std::stringstream	ss;
+	ss << ":" << SERVER_NAME << " 372 " << client.getNick() << " :- " << "Welcome to our 42 IRC server!\r\n";
+	server.sendToClient(client, ss.str());
+
+	ss.str("");
+	ss << ":" << SERVER_NAME << " 372 " << client.getNick() << " :- " << "Be nice, follow the rules, and have fun.\r\n";
+	server.sendToClient(client, ss.str());
+}
+
+void	sendEndMotd(Server& server, Client& client)
+{
+	std::stringstream	ss;
+	ss << ":" << SERVER_NAME << " 376 " << client.getNick() << " :End of /MOTD command\r\n";
+	server.sendToClient(client, ss.str());
 }
 
 void    sendWelcome(Server& server, Client& client)

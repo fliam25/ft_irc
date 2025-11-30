@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/28 03:09:09 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/25 10:14:27 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 16:02:52 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 
 Server::Server(int port, std::string password) : _handleCommand(*this)
 {
-	_loop = 1;
 	_port = port;
 	_password = password;
 	_epollFd = 0;
@@ -92,7 +91,7 @@ void	Server::run()
 	
 	_welcome();
 
-	while (_loop)
+	while (g_stop)
 	{
 		int n = epoll_wait(_epollFd, events, MAX_EVENTS, -1);
 		if (n == -1)
@@ -282,11 +281,6 @@ Client*		Server::getClient(int fd)
 void		Server::setEpoll(int fd)
 {
 	_epollFd = fd;
-}
-
-void		Server::setLoop()
-{
-	_loop = 0;
 }
 
 //	Destructor

@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 20:57:40 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/25 10:09:48 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 16:00:25 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ class Server
 
 			//Setters
 			void					setEpoll(int fd);
-			void					setLoop();
 
 	//Exception
 	class SocketException : public std::runtime_error
@@ -56,7 +55,6 @@ class Server
 	};
 
 	private:
-			bool							_loop;
 			std::string						_password;
 			int								_port;
 			int								_socket;

@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 21:17:53 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/26 13:43:32 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 13:35:11 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ class CommandHandler
 					Server&						_server;
 					std::string					_command;
 					std::vector<std::string>	_params;
+					bool						_quit;
 
 					typedef void (CommandHandler::*CommandFunc)(Client&, const std::vector<std::string>&);
 					std::map<std::string, CommandFunc>	_commands;
@@ -49,6 +50,7 @@ class CommandHandler
 					void		_Topic(Client& client, const std::vector<std::string>& params);
 					void		_Kick(Client& client, const std::vector<std::string>& params);
 					void 		_Mode(Client& client, const std::vector<std::string>& params);
+					void		_Quit(Client& client, const std::vector<std::string>& params);
 					void		_Privmsg(Client& client, const std::vector<std::string>& params);
 };
 

@@ -6,12 +6,35 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 20:50:22 by mqwa              #+#    #+#             */
-/*   Updated: 2025/10/31 02:20:57 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 16:11:37 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "include.h"
 # include "Server.hpp"
+
+volatile sig_atomic_t	g_stop = 1;
+
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	g_stop = 0;
+}
+
+bool	setupSigint()
+{
+	struct sigaction	sa;
+	sa.sa_handler = handle_sigint;
+	sa.sa_flags = 0;
+	sigemptyset(&sa.sa_mask);
+
+	if (sigaction(SIGINT, &sa, NULL) == -1)
+	{
+		std::cerr << "error: sigaction error" << std::endl;
+		return (0);
+	}
+	return (1);
+}
 
 static bool	onlyDigits(char *str)
 {
@@ -58,6 +81,8 @@ int		main(int ac, char **av)
 	int				port;
 	std::string		password;
 
+	if (!setupSigint())
+		return (1);
 	if (!validateArguments(ac, av, port, password))
 		return (1);
 	try

@@ -6,13 +6,15 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/19 20:54:41 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/25 16:42:59 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 16:02:39 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include <string>
 # include <cstring>
 # include <cstdlib>
+# include <csignal>
+# include <cstdio>
 # include <cerrno>
 # include <unistd.h>
 # include <iostream>
@@ -26,6 +28,8 @@
 # include <map>
 # include <vector>
 # include <set>
+
+extern volatile sig_atomic_t g_stop;
 
 # define MAX_EVENTS		1024
 # define BUFFER_SIZE    1024

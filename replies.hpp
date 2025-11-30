@@ -6,7 +6,7 @@
 /*   By: mqwa <mqwa@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/31 05:33:08 by mqwa              #+#    #+#             */
-/*   Updated: 2025/11/05 04:35:17 by mqwa             ###   ########.fr       */
+/*   Updated: 2025/11/29 15:08:14 by mqwa             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,5 +35,8 @@ void	sendWelcome(Server& server, Client& client);
 void	sendYourHost(Server& server, Client& client);
 void	sendCreated(Server& server, Client& client);
 void	sendMyInfo(Server& server, Client& client);
+void	sendStartMotd(Server& server, Client& client);
+void    sendMotd(Server& server, Client& client);
+void    sendEndMotd(Server& server, Client& client);
 
 #endif
