@@ -25,6 +25,7 @@ class Channel
 				~Channel();
 				
 				void SetTopic(const std::string topic);
+				void ClearTopic();
 				void SetUserLimit(int limit);
 				int GetUserLimit();
 				const std::string GetName();

@@ -20,9 +20,13 @@ class Server;
 
 void	broadcastTopic(Server& server, Client& setter, Channel& chan, const std::string& topic);
 void    sendTopic(Server& server, Client& client, const std::string channel, const std::string topic);
+void    sendNoTopic(Server& server, Client& client, const std::string channel);
+void    sendInvite(Server& server, Client& client, Client& target, const std::string channel);
+void    sendErrorNoTextToSend(Server& server, Client& client, const std::string target);
 void    sendErrorNoSuchNick(Server& server, Client& client);
 void    sendErrorNoSuchChannel(Server& server, Client& client, const std::string channel);
 void    sendErrorTargetNotOnChannel(Server& server, Client& client, Client& target, const std::string channel);
+void    sendErrorTargetArleadyOnChannel(Server& server, Client& client, Client& target, const std::string channel);
 void    sendErrorNotOnChannel(Server& server, Client& client, const std::string channel);
 void    sendErrorChannelIsFull(Server& server, Client& client, const std::string channel);
 void    sendErrorInviteOnly(Server& server, Client& client, const std::string channel);
@@ -32,6 +36,6 @@ void    sendErrorChannelOperatorNeeded(Server& server, Client& client, const std
 void	sendClientList(Server& server, Client& client, Channel &channel);
 void    sendEndOfNameList(Server& server, Client& client, const std::string channel);
 void 	sendChannelModes(Server &server, Client &client, Channel &chan);
-void sendErrorUnknownMode(Server& server, Client& client, char mode);
+void	sendErrorUnknownMode(Server& server, Client& client, char mode);
 
 #endif

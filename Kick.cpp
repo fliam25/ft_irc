@@ -21,11 +21,11 @@ void	KickClientFromChannel(Server &server, Client &ToKick, Client& Kicker, Chann
 	{
 		if(chan.isOperator(Kicker))
 		{
-			std::cout << Kicker.getNick() << " is operator" << std::endl;
+			//std::cout << Kicker.getNick() << " is operator" << std::endl;
 			if(chan.isInChannel(ToKick)) 
 			{
 				std::stringstream	ss;
-				ss << Kicker.getNick() << " KICK " << chan.GetName() << " " << ToKick.getNick() << " :" << reason <<"\r\n";
+				ss << ":" << Kicker.getNick() << "!" <<  Kicker.getUser() << "@localhost KICK " << chan.GetName() << " " << ToKick.getNick() << " :" << reason <<"\r\n";
 				server.SendToAllClientInChannel(ss.str(), chan, Kicker, 0);
 				chan.DeleteClient(ToKick);
 				ToKick.DeleteChannel(chan);

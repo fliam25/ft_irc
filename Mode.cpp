@@ -15,6 +15,11 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
         sendErrorNoSuchChannel(this->_server, client, target);
         return;
     }
+	if (!chan->isInChannel(client))
+    {
+        sendErrorNotOnChannel(this->_server, client, target);
+        return;
+    }
     if (params.size() == 1)
     {
         sendChannelModes(this->_server, client, *chan);
@@ -25,7 +30,6 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
         sendErrorChannelOperatorNeeded(this->_server, client, target);
         return;
     }
-
     const std::string& modeString = params[1];
     bool adding = true;
     std::string appliedModes = "";
@@ -54,7 +58,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     if (argIndex >= params.size())
                     {
                         sendErrorMoreParams(this->_server, client, "MODE");
-                        return;
+                        break;
                     }
                     chan->SetChannelKey(params[argIndex]);
                     appliedModes += 'k';
@@ -73,7 +77,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     if (argIndex >= params.size())
                     {
                         sendErrorMoreParams(this->_server, client, "MODE");
-                        return;
+                        break;
                     }
                     int limit = atoi(params[argIndex].c_str());
                     if (limit <= 0) limit = 0;
@@ -93,7 +97,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                 if (argIndex >= params.size())
                 {
                     sendErrorMoreParams(this->_server, client, "MODE");
-                    return;
+                   break;
                 }
 				else
                 {
@@ -101,7 +105,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     if (!targetClient || !chan->isInChannel(*targetClient))
                     {
                         sendErrorNotOnChannel(this->_server, client, params[argIndex]);
-                        return;
+                        break;
                     }
                     if (adding)
                         chan->AddOperator(*targetClient);

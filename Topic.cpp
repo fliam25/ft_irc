@@ -13,9 +13,17 @@ void	CommandHandler::_Topic(Client& client, const std::vector<std::string>& para
 			sendErrorNoSuchChannel(_server, client, params[0]);
 			return;
 		}
+		if (!channel_ptr->isInChannel(client))
+    	{
+        	sendErrorNotOnChannel(this->_server, client, channel_ptr->GetName());
+        	return;
+    	}
 		if(params.size() == 1)
 		{
-			sendTopic(_server, client, channel_ptr->GetName(), channel_ptr->GetTopic());
+			if((channel_ptr->GetTopic()).empty())
+				sendNoTopic(_server, client, channel_ptr->GetName());
+			else
+				sendTopic(_server, client, channel_ptr->GetName(), channel_ptr->GetTopic());
 			return;
 		}
 		if (params.size() == 2)
@@ -25,7 +33,10 @@ void	CommandHandler::_Topic(Client& client, const std::vector<std::string>& para
 				sendErrorChannelOperatorNeeded(_server, client, params[0]);
 				return;
 			}
-			channel_ptr->SetTopic(params[1]);
+			if(params[1].empty())
+				channel_ptr->ClearTopic();
+			else
+				channel_ptr->SetTopic(params[1]);
 			broadcastTopic(_server , client, *channel_ptr, params[1]);
 		}
 	}

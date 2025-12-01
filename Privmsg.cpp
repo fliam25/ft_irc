@@ -6,14 +6,17 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 	std::vector<std::string> Targets;
 	if (params.size() != 2)
 	{
-		sendErrorMoreParams(this->_server, client, "JOIN");
+		sendErrorMoreParams(this->_server, client, "PRIVMSG");
+		return;
+	}
+	if(params[1].empty())
+	{
+		sendErrorNoTextToSend(_server, client, params[0]);
 		return;
 	}
 	Targets = SplitVector(params[0], ',');
-
 	for(size_t i = 0; i < Targets.size(); ++i)
 	{
-
 		if(!Targets[i].empty() && (Targets[i][0] == '#' || Targets[i][0] == '&'))
 		{
 			if(this->_server.IsChannelNameValid(Targets[i]))
@@ -25,10 +28,14 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 				}
 				else
 				{
+					if (!channel_ptr->isInChannel(client))
+    				{
+        				sendErrorNotOnChannel(this->_server, client, channel_ptr->GetName());
+        				return;
+    				}
 					std::stringstream ss;
 					ss << ":" << client.getNick() << "!" << client.getUser() << "@localhost"
 					<< " PRIVMSG " << channel_ptr->GetName() << " :" << params[1] <<"\r\n";
-					ss << "\r\n";
 					_server.SendToAllClientInChannel(ss.str(), *channel_ptr, client, true);
 				}
 			}
@@ -47,7 +54,6 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 					std::stringstream ss;
 					ss << ":" << client.getNick() << "!" << client.getUser() << "@localhost"
 					<< " PRIVMSG " << Client_ptr->getNick() << " :" << params[1] <<"\r\n";
-					ss << "\r\n";
 					_server.sendToClient(*Client_ptr, ss.str());
 			}
 		}

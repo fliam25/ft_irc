@@ -8,10 +8,14 @@ Channel::Channel(const std::string name, Client &Owner, std::string pass, Server
 	}
 	else
 		_password = "";
+	_inviteMode = false;
+	_topicoperator = false;
+	_limit = 0;
 	std::cout << "Created new channel " << _name << " with owner " << Owner.getNick() << " and password " << _password << std::endl;
 	Owner.JoinChannel(*this);
 	this->AddOperator(Owner);
 	this->AddClient(Owner);
+
 }
 Channel::~Channel()
 {
@@ -39,6 +43,12 @@ void Channel::SetTopic(const std::string topic)
 {
 	this->_topic = topic;
 	
+}
+
+void Channel::ClearTopic()
+{
+	if(!this->_topic.empty())
+		this->_topic.clear();
 }
 
 void Channel::SetTopicOperator(bool val)
@@ -84,7 +94,7 @@ void Channel::AddOperator(Client &client)
 void Channel::RemoveOperator(Client &client)
 {
 	std::set<Client*>::iterator it = _operators.find(&client);
-	if (it != _clients.end())
+	if (it != _operators.end())
 	{
 			this->_operators.erase(&client);
 	}
@@ -106,10 +116,14 @@ void Channel::AddClient(Client &client)
 	this->_clients.insert(&client);
 	std::stringstream	ss;
 	ss << ":" << client.getNick() << " JOIN :" << this->GetName() << "\r\n";
+	if(isInvited(client))
+		UnInviteClient(client);
 	this->_server.SendToAllClientInChannel(ss.str(), *this, client, false);
 	sendClientList(this->_server, client, *this);
 	if(!_topic.empty())
-		sendTopic(this->_server, client, this->GetName(), _topic);
+		sendTopic(_server, client, _name, _topic);
+	else
+		sendNoTopic(_server, client, this->GetName());
 }
 
 void Channel::InviteClient(Client &client)
@@ -163,7 +177,6 @@ void Channel::DeleteClient(Client &client)
 	if (it != _clients.end())
 	{		
 		_clients.erase(it);
-
 	}
 }
 

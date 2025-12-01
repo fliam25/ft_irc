@@ -52,6 +52,7 @@ class CommandHandler
 					void 		_Mode(Client& client, const std::vector<std::string>& params);
 					void		_Quit(Client& client, const std::vector<std::string>& params);
 					void		_Privmsg(Client& client, const std::vector<std::string>& params);
+					void		_Invite(Client& client, const std::vector<std::string>& params);
 };
 
 #endif

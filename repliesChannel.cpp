@@ -6,13 +6,15 @@
 void broadcastTopic(Server& server, Client& setter, Channel& chan, const std::string& topic)
 {
     std::stringstream ss;
-    ss << ":" << setter.getNick() << "!" << setter.getUser() << "@localhost" << " TOPIC " << chan.GetName() << " :" << topic << "\r\n";
-
+	std::string nick = setter.getNick();
+	if (nick.empty())
+		nick = "*";
+    ss << ":" << nick << "!" << setter.getUser() << "@localhost" << " TOPIC " << chan.GetName() << " :" << topic << "\r\n";
     server.SendToAllClientInChannel(ss.str(), chan, setter , false);
 }
 
 
-void sendTopic(Server& server, Client& client, const std::string& channel, const std::string& topic)
+void sendTopic(Server& server, Client& client, const std::string channel, const std::string topic)
 {
     std::string nick = client.getNick();
     if (nick.empty())
@@ -28,13 +30,26 @@ void sendTopic(Server& server, Client& client, const std::string& channel, const
     server.sendToClient(client, ss.str());
 }
 
-void    sendTopic(Server& server, Client& client, const std::string channel, const std::string topic)
+void    sendInvite(Server& server, Client& client, Client& target, const std::string channel)
+{
+	std::string nick = client.getNick();
+	if (nick.empty())
+		nick = "*";
+	std::string targetnick = target.getNick();
+	if (targetnick.empty())
+		targetnick = "*";
+	std::stringstream	ss;
+	ss << ":" << nick << "!" << client.getUser() << "@localhost" << " INVITE " << targetnick << " " << channel << "\r\n";
+	server.sendToClient(client, ss.str());
+}
+
+void    sendNoTopic(Server& server, Client& client, const std::string channel)
 {
 	std::string nick = client.getNick();
 	if (nick.empty())
 		nick = "*";
 	std::stringstream	ss;
-	ss << ":" << SERVER_NAME << " 332 " << nick << " " << channel << " :" << topic <<"\r\n";
+	ss << ":" << SERVER_NAME << " 331 " << nick << " " << channel << " :" << "No topic is set" <<"\r\n";
 	server.sendToClient(client, ss.str());
 }
 
@@ -44,7 +59,7 @@ void    sendErrorNoSuchNick(Server& server, Client& client)
 	if (nick.empty())
 		nick = "*";
 	std::stringstream	ss;
-	ss << ":" << SERVER_NAME << " 401 " << nick << " :No such nick\r\n";
+	ss << ":" << SERVER_NAME << " 401 " << nick << " :No such nick/channel\r\n";
 	server.sendToClient(client, ss.str());
 }
 
@@ -55,6 +70,16 @@ void    sendErrorNoSuchChannel(Server& server, Client& client, const std::string
 		nick = "*";
 	std::stringstream	ss;
 	ss << ":" << SERVER_NAME << " 403 " << nick << " " << channel << " :No such channel\r\n";
+	server.sendToClient(client, ss.str());
+}
+
+void    sendErrorNoTextToSend(Server& server, Client& client, const std::string target)
+{
+	std::string nick = client.getNick();
+	if (nick.empty())
+		nick = "*";
+	std::stringstream	ss;
+	ss << ":" << SERVER_NAME << " 412 " << nick << " " << target << " :No text to sendl\r\n";
 	server.sendToClient(client, ss.str());
 }
 
@@ -81,6 +106,18 @@ void    sendErrorNotOnChannel(Server& server, Client& client, const std::string 
 	server.sendToClient(client, ss.str());
 }
 
+void    sendErrorTargetArleadyOnChannel(Server& server, Client& client, Client& target, const std::string channel)
+{
+	std::string nick = client.getNick();
+	if (nick.empty())
+		nick = "*";
+	std::string targetnick = target.getNick();
+	if (targetnick.empty())
+		targetnick = "*";
+	std::stringstream	ss;
+	ss << ":" << SERVER_NAME << " 443 " << nick << " " << targetnick << " " << channel << " :is already on that channel\r\n";
+	server.sendToClient(client, ss.str());
+}
 
 void    sendErrorChannelIsFull(Server& server, Client& client, const std::string channel)
 {
