@@ -19,7 +19,7 @@ class Client;
 class Server;
 
 void	broadcastTopic(Server& server, Client& setter, Channel& chan, const std::string& topic);
-void    sendTopic(Server& server, Client& client, const std::string channel, const std::string topic);
+void    sendTopic(Server& server, Client& client, Channel& channel, const std::string topic);
 void    sendNoTopic(Server& server, Client& client, const std::string channel);
 void    sendInvite(Server& server, Client& client, Client& target, const std::string channel);
 void    sendErrorNoTextToSend(Server& server, Client& client);

@@ -34,21 +34,31 @@ const std::string Channel::GetTopic()
 	return this->_topic;
 }
 
+const std::string Channel::GetTopicDefiner()
+{
+	return this->_topicdefiner;
+}
+
 const std::set<Client*>&	Channel::GetClientsList()
 {
 	return this->_clients;
 }
 
-void Channel::SetTopic(const std::string topic)
+void Channel::SetTopic(const std::string topic,const std::string definer)
 {
 	this->_topic = topic;
+	this->_topicdefiner = definer;
 	
 }
 
 void Channel::ClearTopic()
 {
 	if(!this->_topic.empty())
+	{
 		this->_topic.clear();
+		this->_topicdefiner.clear();
+	}
+		
 }
 
 void Channel::SetTopicOperator(bool val)
@@ -58,7 +68,7 @@ void Channel::SetTopicOperator(bool val)
 
 void Channel::SetInviteOnly(bool val)
 {
-	this->_topicoperator = val;
+	this->_inviteMode = val;
 }
 
 void Channel::SetChannelKey(std::string key)
@@ -122,7 +132,7 @@ void Channel::AddClient(Client &client)
 	this->_server.SendToAllClientInChannel(ss.str(), *this, client, false);
 	sendClientList(this->_server, client, *this);
 	if(!_topic.empty())
-		sendTopic(_server, client, _name, _topic);
+		sendTopic(_server, client, *this, _topic);
 	else
 		sendNoTopic(_server, client, this->GetName());
 }
@@ -149,7 +159,7 @@ bool Channel::isOperator(Client &client)
 
 bool Channel::IsTopicOperator()
 {
-	if (this->_topicoperator)
+	if (this->_topicoperator == true)
 		return true;
 	return false;
 }

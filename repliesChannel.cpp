@@ -14,7 +14,7 @@ void broadcastTopic(Server& server, Client& setter, Channel& chan, const std::st
 }
 
 
-void sendTopic(Server& server, Client& client, const std::string channel, const std::string topic)
+void sendTopic(Server& server, Client& client, Channel& channel, const std::string topic)
 {
     std::string nick = client.getNick();
     if (nick.empty())
@@ -22,10 +22,10 @@ void sendTopic(Server& server, Client& client, const std::string channel, const 
 
     std::stringstream ss;
     ss << ":" << SERVER_NAME << " 332 "
-       << nick << " " << channel << " :" << topic << "\r\n";
+       << nick << " " << channel.GetName() << " :" << topic << "\r\n";
     ss << ":" << SERVER_NAME << " 333 "
-       << nick << " " << channel << " "
-       << client.getNick() << " " << time(NULL) << "\r\n";
+       << nick << " " << channel.GetName() << " "
+       << channel.GetTopicDefiner() << " " << time(NULL) << "\r\n";
 
     server.sendToClient(client, ss.str());
 }
@@ -40,7 +40,7 @@ void    sendInvite(Server& server, Client& client, Client& target, const std::st
 		targetnick = "*";
 	std::stringstream	ss;
 	ss << ":" << nick << "!" << client.getUser() << "@localhost" << " INVITE " << targetnick << " " << channel << "\r\n";
-	server.sendToClient(client, ss.str());
+	server.sendToClient(target, ss.str());
 }
 
 void    sendNoTopic(Server& server, Client& client, const std::string channel)

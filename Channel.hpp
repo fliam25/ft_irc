@@ -24,12 +24,13 @@ class Channel
 				Channel(const std::string name, Client &owner, std::string pass, Server &Server);
 				~Channel();
 				
-				void SetTopic(const std::string topic);
+				void SetTopic(const std::string topic, const std::string topicdefiner);
 				void ClearTopic();
 				void SetUserLimit(int limit);
 				int GetUserLimit();
 				const std::string GetName();
 				const std::string GetTopic();
+				const std::string GetTopicDefiner();
 				void AddOperator(Client &client);
 				void RemoveOperator(Client &client);
 				void AddClient(Client &client);
@@ -50,6 +51,7 @@ class Channel
 		private:
 				std::string			_name;
 				std::string			_topic;
+				std::string			_topicdefiner;
 				std::set<Client*>	_operators;
 				std::string			_password;
 				std::set<Client*>	_clients;

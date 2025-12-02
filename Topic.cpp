@@ -23,7 +23,7 @@ void	CommandHandler::_Topic(Client& client, const std::vector<std::string>& para
 			if((channel_ptr->GetTopic()).empty())
 				sendNoTopic(_server, client, channel_ptr->GetName());
 			else
-				sendTopic(_server, client, channel_ptr->GetName(), channel_ptr->GetTopic());
+				sendTopic(_server, client, *channel_ptr, channel_ptr->GetTopic());
 			return;
 		}
 		if (params.size() == 2)
@@ -36,7 +36,7 @@ void	CommandHandler::_Topic(Client& client, const std::vector<std::string>& para
 			if(params[1].empty())
 				channel_ptr->ClearTopic();
 			else
-				channel_ptr->SetTopic(params[1]);
+				channel_ptr->SetTopic(params[1], client.getNick());
 			broadcastTopic(_server , client, *channel_ptr, params[1]);
 		}
 	}

@@ -27,6 +27,8 @@ void	KickClientFromChannel(Server &server, Client &ToKick, Client& Kicker, Chann
 				std::stringstream	ss;
 				ss << ":" << Kicker.getNick() << "!" <<  Kicker.getUser() << "@localhost KICK " << chan.GetName() << " " << ToKick.getNick() << " :" << reason <<"\r\n";
 				server.SendToAllClientInChannel(ss.str(), chan, Kicker, 0);
+				if(chan.isOperator(ToKick))
+					chan.RemoveOperator(ToKick);
 				chan.DeleteClient(ToKick);
 				ToKick.DeleteChannel(chan);
 			}

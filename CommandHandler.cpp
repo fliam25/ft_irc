@@ -31,6 +31,7 @@ void	CommandHandler::_initializeCommands()
 	_commands["QUIT"] = &CommandHandler::_Quit;
 	_commands["TOPIC"] = &CommandHandler::_Topic;
 	_commands["PRIVMSG"] = &CommandHandler::_Privmsg;
+	_commands["INVITE"] = &CommandHandler::_Invite;
 }
 
 bool	CommandHandler::_checkRegistered(Client& client, const std::string& cmd) const

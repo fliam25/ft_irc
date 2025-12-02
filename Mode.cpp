@@ -45,12 +45,12 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
             case 'i':
                 chan->SetInviteOnly(adding);
                 appliedModes += 'i';
-                break;
+                continue;
 
             case 't':
                 chan->SetTopicOperator(adding);
                 appliedModes += 't';
-                break;
+                continue;
 
             case 'k':
                 if (adding)
@@ -58,7 +58,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     if (argIndex >= params.size())
                     {
                         sendErrorMoreParams(this->_server, client, "MODE");
-                        break;
+                        continue;
                     }
                     chan->SetChannelKey(params[argIndex]);
                     appliedModes += 'k';
@@ -70,14 +70,14 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     chan->SetChannelKey("");
                     appliedModes += 'k';
                 }
-                break;
+                continue;
             case 'l':
                 if (adding)
                 {
                     if (argIndex >= params.size())
                     {
                         sendErrorMoreParams(this->_server, client, "MODE");
-                        break;
+                        continue;
                     }
                     int limit = atoi(params[argIndex].c_str());
                     if (limit <= 0) limit = 0;
@@ -91,13 +91,13 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     chan->SetUserLimit(0);
                     appliedModes += 'l';
                 }
-                break;
+               	continue;
 
             case 'o':
                 if (argIndex >= params.size())
                 {
                     sendErrorMoreParams(this->_server, client, "MODE");
-                   break;
+                   continue;
                 }
 				else
                 {
@@ -105,7 +105,7 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     if (!targetClient || !chan->isInChannel(*targetClient))
                     {
                         sendErrorNotOnChannel(this->_server, client, params[argIndex]);
-                        break;
+                        continue;
                     }
                     if (adding)
                         chan->AddOperator(*targetClient);
@@ -116,10 +116,10 @@ void CommandHandler::_Mode(Client& client, const std::vector<std::string>& param
                     appliedArgs.push_back(params[argIndex]);
                     argIndex++;
                 }
-                break;
+                continue;
             default:
             	sendErrorUnknownMode(this->_server, client, c);
-                break;
+                continue;
         }
     }
     if (!appliedModes.empty())
