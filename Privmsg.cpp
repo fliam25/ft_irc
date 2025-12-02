@@ -11,7 +11,7 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 	}
 	if(params[1].empty())
 	{
-		sendErrorNoTextToSend(_server, client, params[0]);
+		sendErrorNoTextToSend(_server, client);
 		return;
 	}
 	Targets = SplitVector(params[0], ',');
@@ -31,7 +31,7 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 					if (!channel_ptr->isInChannel(client))
     				{
         				sendErrorNotOnChannel(this->_server, client, channel_ptr->GetName());
-        				return;
+        				continue;;
     				}
 					std::stringstream ss;
 					ss << ":" << client.getNick() << "!" << client.getUser() << "@localhost"

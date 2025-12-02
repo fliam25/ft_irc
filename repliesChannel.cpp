@@ -73,13 +73,13 @@ void    sendErrorNoSuchChannel(Server& server, Client& client, const std::string
 	server.sendToClient(client, ss.str());
 }
 
-void    sendErrorNoTextToSend(Server& server, Client& client, const std::string target)
+void    sendErrorNoTextToSend(Server& server, Client& client)
 {
 	std::string nick = client.getNick();
 	if (nick.empty())
 		nick = "*";
 	std::stringstream	ss;
-	ss << ":" << SERVER_NAME << " 412 " << nick << " " << target << " :No text to sendl\r\n";
+	ss << ":" << SERVER_NAME << " 412 " << nick << " :No text to sendl\r\n";
 	server.sendToClient(client, ss.str());
 }
 

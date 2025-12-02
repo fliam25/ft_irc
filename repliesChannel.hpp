@@ -22,7 +22,7 @@ void	broadcastTopic(Server& server, Client& setter, Channel& chan, const std::st
 void    sendTopic(Server& server, Client& client, const std::string channel, const std::string topic);
 void    sendNoTopic(Server& server, Client& client, const std::string channel);
 void    sendInvite(Server& server, Client& client, Client& target, const std::string channel);
-void    sendErrorNoTextToSend(Server& server, Client& client, const std::string target);
+void    sendErrorNoTextToSend(Server& server, Client& client);
 void    sendErrorNoSuchNick(Server& server, Client& client, std::string target);
 void    sendErrorNoSuchChannel(Server& server, Client& client, const std::string channel);
 void    sendErrorTargetNotOnChannel(Server& server, Client& client, Client& target, const std::string channel);
