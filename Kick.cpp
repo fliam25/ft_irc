@@ -72,7 +72,7 @@ void	CommandHandler::_Kick(Client& client, const std::vector<std::string>& param
 						{
 							Client *Client_ptr = _server.findClient(Users[j]);
 							if(Client_ptr == NULL)
-								sendErrorNoSuchNick(_server, client);
+								sendErrorNoSuchNick(_server, client, Users[j]);
 							else
 								KickClientFromChannel(_server, *Client_ptr, client, *channel_ptr, reason);
 						}
@@ -81,7 +81,7 @@ void	CommandHandler::_Kick(Client& client, const std::vector<std::string>& param
 					{
 							Client *Client_ptr = _server.findClient(Users[i]);
 							if(Client_ptr == NULL)
-								sendErrorNoSuchNick(_server, client);
+								sendErrorNoSuchNick(_server, client, Users[i]);
 							else
 								KickClientFromChannel(_server, *Client_ptr, client, *channel_ptr, reason);
 					}

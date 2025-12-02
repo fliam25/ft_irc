@@ -53,13 +53,13 @@ void    sendNoTopic(Server& server, Client& client, const std::string channel)
 	server.sendToClient(client, ss.str());
 }
 
-void    sendErrorNoSuchNick(Server& server, Client& client)
+void    sendErrorNoSuchNick(Server& server, Client& client, std::string target)
 {
 	std::string nick = client.getNick();
 	if (nick.empty())
 		nick = "*";
 	std::stringstream	ss;
-	ss << ":" << SERVER_NAME << " 401 " << nick << " :No such nick/channel\r\n";
+	ss << ":" << SERVER_NAME << " 401 " << nick << " " << target << " :No such nick/channel\r\n";
 	server.sendToClient(client, ss.str());
 }
 

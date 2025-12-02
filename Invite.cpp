@@ -8,12 +8,12 @@ void	CommandHandler::_Invite(Client& client, const std::vector<std::string>& par
 	{
 		Client *Client_ptr = _server.findClient(params[0]);
 		if(Client_ptr == NULL)
-			sendErrorNoSuchNick(_server, client);
+			sendErrorNoSuchNick(_server, client, params[0]);
 		else
 		{
 			if(!this->_server.IsChannelNameValid(params[1]))
 			{
-				sendErrorBadChannelMask(_server,client,params[0]);
+				sendErrorBadChannelMask(_server,client,params[1]);
 				return;
 			}
 			Channel *channel_ptr = this->_server.FindChannel(params[1]);

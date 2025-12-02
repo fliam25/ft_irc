@@ -114,6 +114,7 @@ bool Channel::isInChannel(Client &client)
 void Channel::AddClient(Client &client)
 {
 	this->_clients.insert(&client);
+	client.JoinChannel(*this);
 	std::stringstream	ss;
 	ss << ":" << client.getNick() << " JOIN :" << this->GetName() << "\r\n";
 	if(isInvited(client))
@@ -175,7 +176,7 @@ void Channel::DeleteClient(Client &client)
 {
 	std::set<Client*>::iterator it = _clients.find(&client);
 	if (it != _clients.end())
-	{		
+	{	
 		_clients.erase(it);
 	}
 }

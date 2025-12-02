@@ -48,7 +48,7 @@ void	CommandHandler::_Privmsg(Client& client, const std::vector<std::string>& pa
 		{
 			Client *Client_ptr = _server.findClient(Targets[i]);
 			if(Client_ptr == NULL)
-				sendErrorNoSuchNick(_server, client);
+				sendErrorNoSuchNick(_server, client, Targets[i]);
 			else
 			{
 					std::stringstream ss;
