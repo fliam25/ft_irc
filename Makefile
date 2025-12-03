@@ -1,9 +1,26 @@
 # Variables
 NAME        = ircserv
-SRCS        = main.cpp Server.cpp CommandHandler.cpp Client.cpp Pass.cpp Nick.cpp replies.cpp User.cpp Channel.cpp ServerChannel.cpp Join.cpp Kick.cpp Mode.cpp Topic.cpp repliesChannel.cpp Privmsg.cpp Quit.cpp Invite.cpp
+SRCS        = ./srcs/main.cpp
+SRCS		+= ./srcs/Server.cpp
+SRCS		+= ./srcs/CommandHandler.cpp
+SRCS		+= ./srcs/Client.cpp
+SRCS		+= ./srcs/Channel.cpp
+SRCS		+= ./srcs/ServerChannel.cpp
+SRCS		+= ./srcs/replies.cpp
+SRCS		+= ./srcs/repliesChannel.cpp
+SRCS		+= ./srcs/commands/Pass.cpp
+SRCS		+= ./srcs/commands/Nick.cpp
+SRCS		+= ./srcs/commands/User.cpp
+SRCS		+= ./srcs/commands/Join.cpp
+SRCS		+= ./srcs/commands/Kick.cpp
+SRCS		+= ./srcs/commands/Mode.cpp
+SRCS		+= ./srcs/commands/Topic.cpp
+SRCS		+= ./srcs/commands/Privmsg.cpp
+SRCS		+= ./srcs/commands/Quit.cpp
+SRCS		+= ./srcs/commands/Invite.cpp
 OBJS        = $(SRCS:.cpp=.o)
 CXX         = c++
-CXXFLAGS    = -Wall -Wextra -Werror -std=c++98 -I. -g3	
+CXXFLAGS    = -Wall -Wextra -Werror -std=c++98 -I ./includes/ -g3
 
 # Rules
 all: $(NAME)
